@@ -3,6 +3,7 @@ package com.example.controller;
 import java.net.URI;
 import java.util.Optional;
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import com.example.domain.Poll;
 import com.example.exception.ResourceNotFoundException;
@@ -37,7 +38,7 @@ public class PollController {
     }
 
     @RequestMapping(value = "/polls", method = RequestMethod.POST)
-    public ResponseEntity<?> createPoll(@RequestBody Poll poll) {
+    public ResponseEntity<?> createPoll(@Valid @RequestBody Poll poll) {
         poll = pollRepository.save(poll);
 
         // Set the location header for the newly created resource
