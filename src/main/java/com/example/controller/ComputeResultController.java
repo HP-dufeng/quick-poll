@@ -8,6 +8,8 @@ import com.example.domain.Vote;
 import com.example.dto.OptionCount;
 import com.example.dto.VoteResult;
 import com.example.repository.VoteRepository;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Api(value = "computeresult", description = "Compute Results API")
 public class ComputeResultController {
 
     @Inject
     private VoteRepository voteRepository;
 
     @RequestMapping(value="/computeresult", method= RequestMethod.GET)
+    @ApiOperation(value = "Computes the results of a given Poll", response = VoteResult.class)
     public ResponseEntity<?> computeResult(@RequestParam Long pollId) {
         VoteResult voteResult = new VoteResult();
         Iterable<Vote> allVotes = voteRepository.findByPoll(pollId);
