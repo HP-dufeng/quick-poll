@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.example.dto.error.ErrorDetail;
 import com.example.dto.error.ValidationError;
+import com.example.exception.JwtAuthenticationException;
 import com.example.exception.ResourceNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +39,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         errorDetail.setDeveloperMessage(rnfe.getClass().getName());
 
         return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<?> handleJwtAuthenticationException(JwtAuthenticationException rnfe, HttpServletRequest request) {
+
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimeStamp(new Date().getTime());
+        errorDetail.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetail.setTitle("Access denied.");
+        errorDetail.setDetail(rnfe.getMessage());
+        errorDetail.setDeveloperMessage(rnfe.getClass().getName());
+
+        return new ResponseEntity<>(errorDetail, null, HttpStatus.UNAUTHORIZED);
     }
 
     @Override
