@@ -3,6 +3,7 @@ package com.example.auth;
 import javax.inject.Inject;
 
 import com.example.exception.JwtAuthenticationException;
+import com.example.service.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

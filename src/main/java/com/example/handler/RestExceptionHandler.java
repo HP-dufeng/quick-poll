@@ -10,11 +10,13 @@ import com.example.dto.error.ErrorDetail;
 import com.example.dto.error.ValidationError;
 import com.example.exception.JwtAuthenticationException;
 import com.example.exception.ResourceNotFoundException;
+import netscape.security.ForbiddenTargetException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,17 +43,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(JwtAuthenticationException.class)
-    public ResponseEntity<?> handleJwtAuthenticationException(JwtAuthenticationException rnfe, HttpServletRequest request) {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleJwtAuthenticationException(AccessDeniedException rnfe, HttpServletRequest request) {
 
         ErrorDetail errorDetail = new ErrorDetail();
         errorDetail.setTimeStamp(new Date().getTime());
-        errorDetail.setStatus(HttpStatus.UNAUTHORIZED.value());
-        errorDetail.setTitle("Access denied.");
+        errorDetail.setStatus(HttpStatus.FORBIDDEN.value());
+        errorDetail.setTitle("Access is denied.");
         errorDetail.setDetail(rnfe.getMessage());
         errorDetail.setDeveloperMessage(rnfe.getClass().getName());
 
-        return new ResponseEntity<>(errorDetail, null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorDetail, null, HttpStatus.FORBIDDEN);
     }
 
     @Override

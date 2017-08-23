@@ -60,6 +60,7 @@ public class PollController {
     @RequestMapping(value="/polls", method=RequestMethod.GET)
     @ApiOperation(value = "Retrieves all the polls", response=Poll.class,
             responseContainer="List")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<Poll>> getAllPolls(Pageable pageable) {
         Page<Poll> allPolls = pollRepository.findAll(pageable);
         return new ResponseEntity<>(allPolls, HttpStatus.OK);
