@@ -1,8 +1,7 @@
 package com.example.auth;
 
-import com.example.domain.User;
+import com.example.auth.dto.UserProfile;
 import com.example.exception.JwtAuthenticationException;
-import com.example.service.JwtService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,13 +14,13 @@ import javax.inject.Inject;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Inject
-    private JwtService jwtService;
+    private TokenVerifyService jwtService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         try {
             String accessToken = (String)authentication.getPrincipal();
-            User possibleProfile = jwtService.verify(accessToken);
+            UserProfile possibleProfile = jwtService.verify(accessToken);
             return new JwtAuthenticatedProfile(possibleProfile);
         } catch (Exception e) {
             throw new JwtAuthenticationException("Failed to verify token", e);

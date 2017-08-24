@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecretKeyProvider {
     public byte[] getKey() throws URISyntaxException, IOException {
-        return Files.readAllBytes(Paths.get(this.getClass().getResource("/idsrv3test.pfx").toURI()));
+        return Files.readAllBytes(Paths.get(this.getClass().getResource("/jwt.key").toURI()));
     }
 }

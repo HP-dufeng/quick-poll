@@ -1,24 +1,37 @@
 package com.example.auth;
 
-import com.example.domain.User;
+import com.example.auth.dto.UserProfile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class JwtAuthenticatedProfile implements Authentication {
 
-    private final User minimalProfile;
+    @Autowired
+    private UserProfile userProfile;
 
-    public JwtAuthenticatedProfile(User minimalProfile) {
-        this.minimalProfile = minimalProfile;
+    public JwtAuthenticatedProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        Collection<SimpleGrantedAuthority> list = new ArrayList<>();
+
+        Collection<String> roles = userProfile.getRole();
+        if(roles!=null && (!roles.isEmpty())) {
+            for (String s : roles) {
+                list.add(new SimpleGrantedAuthority(s));
+            }
+        }
+
+        return list;
     }
 
     @Override
@@ -48,6 +61,6 @@ public class JwtAuthenticatedProfile implements Authentication {
 
     @Override
     public String getName() {
-        return minimalProfile.getUsername();
+        return null;
     }
 }
