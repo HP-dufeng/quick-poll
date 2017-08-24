@@ -3,10 +3,12 @@ package com.example.service;
 import com.example.auth.TokenVerifyService;
 import com.example.auth.dto.UserProfile;
 import com.example.dto.JwtUserProfile;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,9 +19,11 @@ import java.util.List;
 @Component
 public class JwtService implements TokenVerifyService {
 
+    @Value("${token_verify_url}")
+    private String token_verify_url ;
+
     public UserProfile verify(String token) throws RestClientException {
 
-             String QUICK_POLL_URI_V1 = "http://wucc.wdqh.com:6789/identity/connect/userinfo";
              RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
@@ -28,7 +32,7 @@ public class JwtService implements TokenVerifyService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
 
 //            HttpEntity<Object> response = restTemplate.exchange(
-//                    QUICK_POLL_URI_V1,
+//                    token_verify_url,
 //                    HttpMethod.GET,
 //                    entity,
 //                    Object.class);
